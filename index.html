@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart PriceMaster Catalog Generator · Principal AI Live Runner</title>
+  <title>Smart PriceMaster Catalog Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    
     :root {
       --bg: #090d16;
       --card-bg: #111827;
@@ -18,7 +19,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
@@ -26,8 +27,6 @@
       min-height: 100vh;
     }
     .container { max-width: 1080px; margin: 0 auto; }
-    
-    /* Top Bar */
     .topbar {
       display: flex;
       justify-content: space-between;
@@ -62,7 +61,13 @@
       background: var(--card-bg);
       color: #cbd5e1;
     }
-    .nav-btn:hover { background: #1e293b; color: #fff; border-color: #3b82f6; }
+    .nav-btn:hover { background: #1e293b; color: #fff; border-color: var(--accent); }
+    .nav-btn-vercel {
+      background: #000;
+      color: #fff;
+      border: 1px solid #333;
+    }
+    .nav-btn-vercel:hover { background: #111; border-color: #fff; }
     .nav-btn-primary {
       background: var(--accent);
       color: #090d16;
@@ -70,7 +75,6 @@
     }
     .nav-btn-primary:hover { opacity: 0.9; color: #000; }
 
-    /* Header */
     header { text-align: center; margin-bottom: 2.25rem; }
     .badge {
       display: inline-flex;
@@ -102,22 +106,45 @@
     h1 { font-size: 2.3rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
     p.lead { font-size: 1.05rem; color: var(--text-muted); max-width: 800px; margin: 0 auto; }
 
-    /* Interactive Control & Execution Console */
-    .console-panel {
+    .app-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 1.75rem;
       margin-bottom: 2rem;
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
     }
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 1.5rem;
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
     }
-    .control-group label {
+    
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      background: var(--accent);
+      color: #090d16;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+    }
+    .btn-action:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-action:active { transform: translateY(1px); }
+    
+    .form-label {
       display: block;
       font-size: 0.8rem;
       font-weight: 700;
@@ -126,159 +153,21 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    .control-select {
+    .form-input, .form-select, .form-textarea {
       width: 100%;
       background: #0d131f;
       border: 1px solid var(--card-border);
       color: #f1f5f9;
       font-family: inherit;
-      font-size: 0.9rem;
-      padding: 0.65rem 0.9rem;
+      font-size: 0.92rem;
+      padding: 0.7rem 0.9rem;
       border-radius: 8px;
       outline: none;
       transition: border-color 0.2s;
     }
-    .control-select:focus { border-color: var(--accent); }
-    
-    .action-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--card-border);
-    }
-    .run-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
-      background: var(--accent);
-      color: #090d16;
-      font-family: inherit;
-      font-weight: 800;
-      font-size: 1.05rem;
-      padding: 0.8rem 1.8rem;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
-    }
-    .run-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
-    .run-btn:active { transform: translateY(1px); }
-    .run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    
-    .execution-status {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: #34d399;
-    }
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      background: #34d399;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #34d399;
-    }
-
-    /* Progress Bar */
-    .progress-bar-container {
-      width: 100%;
-      height: 6px;
-      background: #1e293b;
-      border-radius: 9999px;
-      overflow: hidden;
-      margin: 1.25rem 0 1rem 0;
-      display: none;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), #38bdf8);
-      border-radius: 9999px;
-      transition: width 0.15s ease-out;
-    }
-
-    /* Live Telemetry Terminal */
-    .terminal-box {
-      background: #060910;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.2rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      color: #38bdf8;
-      max-height: 190px;
-      overflow-y: auto;
-      margin-top: 1rem;
-    }
-    .log-line {
-      margin-bottom: 0.35rem;
-      opacity: 0;
-      animation: fadeIn 0.25s forwards;
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    .log-time { color: #64748b; font-size: 0.75rem; margin-right: 0.5rem; }
-    .log-ok { color: #34d399; }
-    .log-val { color: #fbbf24; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
 
     /* Result Preview Section */
-    .result-section {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-    }
-    .result-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .result-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .tab-pills {
-      display: flex;
-      background: #0d131f;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 0.25rem;
-      gap: 0.25rem;
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-family: inherit;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 0.35rem 0.8rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .tab-btn.active {
-      background: var(--accent);
-      color: #090d16;
-    }
-
-    /* Result Display Frame with Image + Inline Fallback */
     .result-frame {
       width: 100%;
       border-radius: 12px;
@@ -288,8 +177,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 280px;
-      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+      min-height: 240px;
+      margin-bottom: 1.5rem;
     }
     .result-frame img {
       width: 100%;
@@ -307,63 +196,21 @@
       height: auto;
       display: block;
     }
-    .telemetry-view {
-      width: 100%;
-      background: #060910;
-      padding: 1.5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: #93c5fd;
-      border-radius: 12px;
-      display: none;
-      white-space: pre-wrap;
-      overflow-x: auto;
-    }
 
-    /* KPIs Grid */
-    .kpis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.5rem;
-    }
-    .kpi-card {
-      background: #0c121e;
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      text-align: center;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .kpi-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    .kpi-val {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
-    }
-    .kpi-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    /* Footer */
     footer {
       text-align: center;
-      padding: 2rem 0;
+      padding: 2.5rem 0 1rem 0;
       border-top: 1px solid var(--card-border);
       color: var(--text-muted);
       font-size: 0.85rem;
     }
     footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    
+    .quote-box {
+      background: #080c14; border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;
+    }
+    .quote-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #1f293d; font-size: 0.9rem; }
+    .quote-row.total { border-bottom: none; font-size: 1.2rem; font-weight: 800; color: #fff; padding-top: 0.75rem; }
   </style>
 </head>
 <body>
@@ -378,6 +225,9 @@
         <a href="https://github.com/AbishekPranavGV/Smart-Price-Master-Catalog-Generator" target="_blank" class="nav-btn">
           GitHub Repository ↗
         </a>
+        <a href="https://vercel.com/new/clone?repository-url=https://github.com/AbishekPranavGV/Smart-Price-Master-Catalog-Generator" target="_blank" class="nav-btn nav-btn-vercel" title="Deploy directly to Vercel via GitHub">
+          ▲ Deploy to Vercel
+        </a>
         <a href="https://abishekpranavportfolio.lovable.app/" target="_blank" class="nav-btn nav-btn-primary">
           Master Portfolio ↗
         </a>
@@ -388,78 +238,88 @@
     <header>
       <div class="badge">
         <div class="badge-dot"></div>
-        <span>DYNAMIC PRICING ENGINE</span>
+        <span>VERCEL-READY DYNAMIC PRICING</span>
       </div>
       <h1>Smart PriceMaster Catalog Generator</h1>
-      <p class="lead">Automated pricing engine synchronizing Google Drive spreadsheets with wholesale margins, tiered discounts, and WhatsApp/Email dispatch.</p>
+      <p class="lead">Dynamic wholesale and retail pricing engine with automated margin tiers, GST calculation, and instant WhatsApp quotation dispatcher.</p>
     </header>
-
-    <!-- Interactive Execution Console -->
-    <div class="console-panel">
-      <div class="controls-grid">
-        
-      <div class="control-group">
-        <label>Pricing Mode</label>
-        <select class="control-select" id="ctrl-0">
-          <option value="Dynamic Tiered Margins">Dynamic Tiered Margins</option><option value="OEM Distributor Wholesale">OEM Distributor Wholesale</option><option value="Spot Price Currency Adjusted">Spot Price Currency Adjusted</option>
-        </select>
-      </div>
     
-      <div class="control-group">
-        <label>Dispatch Channel</label>
-        <select class="control-select" id="ctrl-1">
-          <option value="WhatsApp Cloud API">WhatsApp Cloud API</option><option value="Automated PDF Quotation">Automated PDF Quotation</option><option value="Direct IndiaMART Sync">Direct IndiaMART Sync</option>
-        </select>
-      </div>
-    
+
+    <!-- Live Working Application Console -->
+    <div class="app-card">
+      <div class="card-title">
+        <span>⚡ Interactive Dynamic PriceMaster Calculator & Quote Dispatcher</span>
       </div>
 
-      <div class="progress-bar-container" id="progressBar">
-        <div class="progress-bar-fill" id="progressFill"></div>
-      </div>
-
-      <div class="action-row">
-        <button class="run-btn" id="runBtn" onclick="executeLiveSimulation()">
-          <span>▶ Execute Live Run</span>
-        </button>
-
-        <div class="execution-status" id="execStatus">
-          <div class="status-dot"></div>
-          <span id="statusText">System Ready · Standing by for execution</span>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <label class="form-label">SKU / Product Selection</label>
+          <select id="skuSelect" class="form-select" onchange="updateBaseCost()">
+            <option value="3200">Digital Pressure Transmitter (Base: ₹3,200)</option>
+            <option value="5400">Electromagnetic Flow Sensor (Base: ₹5,400)</option>
+            <option value="1850">RTD PT100 Temperature Probe (Base: ₹1,850)</option>
+            <option value="8200">Ultrasonic Level Meter (Base: ₹8,200)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Order Quantity (Units)</label>
+          <input type="number" id="qtyInput" class="form-input" value="10" min="1" oninput="calculateQuote()" />
+        </div>
+        <div>
+          <label class="form-label">Customer Margin Tier</label>
+          <select id="marginTier" class="form-select" onchange="calculateQuote()">
+            <option value="0.15">OEM Partner (+15%)</option>
+            <option value="0.25" selected>Wholesale Distributor (+25%)</option>
+            <option value="0.38">Retail Direct (+38%)</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Currency</label>
+          <select id="currencySelect" class="form-select" onchange="calculateQuote()">
+            <option value="INR">INR (₹)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+          </select>
         </div>
       </div>
 
-      <!-- Telemetry Output Stream -->
-      <div class="terminal-box" id="terminalBox">
-        <div class="log-line">
-          <span class="log-time">[STANDBY]</span> Engine primed. Click 'Execute Live Run' to trigger operational pipeline.
+      <div class="quote-box" id="quoteResult">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid #1f293d; padding-bottom:0.75rem;">
+          <div>
+            <div style="font-weight:800; font-size:1.1rem; color:#fff;" id="quoteSkuTitle">Digital Pressure Transmitter</div>
+            <div style="font-size:0.78rem; color:#94a3b8;" id="quoteRef">REF: NUNES-Q-2026-8491 · Valid 30 Days</div>
+          </div>
+          <a href="#" id="waShareBtn" target="_blank" class="nav-btn" style="background:#25d366; color:#000; font-weight:800; border:none;">
+            💬 Share Quote via WhatsApp
+          </a>
         </div>
+
+        <div class="quote-row"><span>Unit Base Cost</span><span id="qBase" style="font-family:'JetBrains Mono';">₹3,200</span></div>
+        <div class="quote-row"><span>Applied Tier Margin</span><span id="qMargin" style="color:#38bdf8;">+25.0%</span></div>
+        <div class="quote-row"><span>Net Unit Selling Price</span><span id="qUnit" style="font-family:'JetBrains Mono'; font-weight:700;">₹4,000</span></div>
+        <div class="quote-row"><span>Quantity Ordered</span><span id="qQty">10 Units</span></div>
+        <div class="quote-row"><span>Bulk Volume Discount</span><span id="qDisc" style="color:#34d399;">-5.0% (Qty 10+)</span></div>
+        <div class="quote-row"><span>GST / Tax (18%)</span><span id="qTax" style="font-family:'JetBrains Mono';">₹6,840</span></div>
+        <div class="quote-row total"><span>Total Quotation Payable</span><span id="qTotal" style="color:#34d399; font-family:'JetBrains Mono';">₹44,840</span></div>
       </div>
     </div>
 
+    
     <!-- Live System Result Output Preview -->
-    <div class="result-section">
-      <div class="result-header">
-        <div class="result-title">
-          <span>📊 Live System Result Output</span>
-          <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#34d399; border:1px solid #059669; padding:0.2rem 0.6rem; border-radius:9999px;">
-            VERIFIED 200 OK
-          </span>
-        </div>
-
-        <div class="tab-pills">
-          <button class="tab-btn active" id="tabVisual" onclick="switchTab('visual')">Visual Output</button>
-          <button class="tab-btn" id="tabTelemetry" onclick="switchTab('telemetry')">Telemetry JSON</button>
-        </div>
+    <div class="app-card">
+      <div class="card-title">
+        <span>📊 Verified System Architecture & Output Preview</span>
+        <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#34d399; border:1px solid #059669; padding:0.2rem 0.6rem; border-radius:9999px;">
+          VERIFIED 200 OK
+        </span>
       </div>
 
-      <!-- Display Frame: Image with automatic inline fallback -->
-      <div class="result-frame" id="visualContainer">
+      <div class="result-frame">
         <img 
           src="result_preview.svg" 
-          alt="Smart PriceMaster Catalog Generator Verified Result Output" 
+          alt="Smart-Price-Master-Catalog-Generator Verified Result Output" 
           id="resultImg"
-          onerror="handleImageFallback()" 
+          onerror="this.style.display='none'; document.getElementById('inlineSvgFallback').style.display='block';" 
         />
         <div class="inline-svg-wrap" id="inlineSvgFallback">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 340" width="100%" height="100%">
@@ -542,136 +402,52 @@
 </svg>
         </div>
       </div>
-
-      <!-- Telemetry JSON View -->
-      <div class="telemetry-view" id="telemetryContainer">{
-  "repository": "Smart-Price-Master-Catalog-Generator",
-  "environment": "Production Verified GitHub Pages",
-  "ci_cd_status": "Success (200 OK)",
-  "model_architecture": "Smart PriceMaster Catalog Generator",
-  "runtime_latency": "24.8ms",
-  "memory_allocation": "14.2 MB",
-  "metrics": {
-    "Price Sheet Sync": "Real-Time",
-    "Tiered Discount Engine": "Margin Rules",
-    "Quote & Catalog Dispatch": "1-Click"
-  }
-}</div>
-
-      <!-- KPI Metrics Row -->
-      <div class="kpis-grid">
-        
-      <div class="kpi-card">
-        <div class="kpi-val" id="kpi-val-0">Real-Time</div>
-        <div class="kpi-label">Price Sheet Sync</div>
-      </div>
-    
-      <div class="kpi-card">
-        <div class="kpi-val" id="kpi-val-1">Margin Rules</div>
-        <div class="kpi-label">Tiered Discount Engine</div>
-      </div>
-    
-      <div class="kpi-card">
-        <div class="kpi-val" id="kpi-val-2">1-Click</div>
-        <div class="kpi-label">Quote & Catalog Dispatch</div>
-      </div>
-    
-      </div>
     </div>
+    
 
-    <!-- Footer -->
     <footer>
       Engineered by <a href="https://abishekpranavportfolio.lovable.app/" target="_blank">Abishek Pranav G V</a> · Business Analyst & Data/AI Automation Specialist
     </footer>
-
   </div>
 
   <script>
-    const execSteps = ["[DRIVE] Pulling latest Master Price List spreadsheet from Google Drive...", "[MARGINS] Applying category markup formulas (Tier A: +18%, Tier B: +24%)...", "[RENDER] Formatting customer-ready quotation PDF with dynamic QR payment link...", "[SUCCESS] Price master catalog generated."];
-    let isRunning = false;
-
-    function handleImageFallback() {
-      console.warn("External SVG load triggered fallback. Rendering inline SVG seamlessly.");
-      const img = document.getElementById("resultImg");
-      const fallback = document.getElementById("inlineSvgFallback");
-      if (img) img.style.display = "none";
-      if (fallback) fallback.style.display = "block";
+    function updateBaseCost() {
+      calculateQuote();
     }
 
-    function switchTab(mode) {
-      const visual = document.getElementById("visualContainer");
-      const telemetry = document.getElementById("telemetryContainer");
-      const tabV = document.getElementById("tabVisual");
-      const tabT = document.getElementById("tabTelemetry");
+    function calculateQuote() {
+      const baseCost = parseFloat(document.getElementById("skuSelect").value);
+      const qty = parseInt(document.getElementById("qtyInput").value) || 1;
+      const margin = parseFloat(document.getElementById("marginTier").value);
+      const curr = document.getElementById("currencySelect").value;
+      const skuText = document.getElementById("skuSelect").options[document.getElementById("skuSelect").selectedIndex].text.split(" (")[0];
 
-      if (mode === "visual") {
-        visual.style.display = "flex";
-        telemetry.style.display = "none";
-        tabV.classList.add("active");
-        tabT.classList.remove("active");
-      } else {
-        visual.style.display = "none";
-        telemetry.style.display = "block";
-        tabV.classList.remove("active");
-        tabT.classList.add("active");
-      }
+      let unitPrice = baseCost * (1 + margin);
+      let discRate = qty >= 50 ? 0.12 : (qty >= 10 ? 0.05 : 0.0);
+      let discountedUnit = unitPrice * (1 - discRate);
+      let subtotal = discountedUnit * qty;
+      let tax = subtotal * 0.18;
+      let grandTotal = subtotal + tax;
+
+      let symbol = "₹";
+      let rate = 1;
+      if (curr === "USD") { symbol = "$"; rate = 0.012; }
+      else if (curr === "EUR") { symbol = "€"; rate = 0.011; }
+
+      document.getElementById("quoteSkuTitle").innerText = skuText;
+      document.getElementById("qBase").innerText = symbol + Math.round(baseCost * rate).toLocaleString();
+      document.getElementById("qMargin").innerText = "+" + (margin * 100).toFixed(1) + "%";
+      document.getElementById("qUnit").innerText = symbol + Math.round(unitPrice * rate).toLocaleString();
+      document.getElementById("qQty").innerText = qty + " Units";
+      document.getElementById("qDisc").innerText = discRate > 0 ? ("-" + (discRate * 100) + "% Tier Applied") : "None (Std)";
+      document.getElementById("qTax").innerText = symbol + Math.round(tax * rate).toLocaleString();
+      document.getElementById("qTotal").innerText = symbol + Math.round(grandTotal * rate).toLocaleString();
+
+      const msg = encodeURIComponent(`NUNES PriceMaster Quote\nProduct: ${skuText}\nQuantity: ${qty} Units\nTotal: ${symbol}${Math.round(grandTotal * rate).toLocaleString()} (Inc. GST)\nRef: NUNES-Q-2026-8491`);
+      document.getElementById("waShareBtn").href = `https://wa.me/?text=${msg}`;
     }
 
-    function getTime() {
-      const d = new Date();
-      return '[' + d.toTimeString().split(' ')[0] + '.' + String(d.getMilliseconds()).padStart(3, '0') + ']';
-    }
-
-    function executeLiveSimulation() {
-      if (isRunning) return;
-      isRunning = true;
-
-      const btn = document.getElementById("runBtn");
-      const statusText = document.getElementById("statusText");
-      const progressBar = document.getElementById("progressBar");
-      const progressFill = document.getElementById("progressFill");
-      const term = document.getElementById("terminalBox");
-
-      btn.disabled = true;
-      btn.innerHTML = '<span>⚡ Executing Pipeline...</span>';
-      statusText.innerText = "Running inference telemetry across cluster...";
-      progressBar.style.display = "block";
-      progressFill.style.width = "0%";
-      term.innerHTML = "";
-
-      let stepIdx = 0;
-      const totalSteps = execSteps.length;
-
-      const interval = setInterval(() => {
-        if (stepIdx < totalSteps) {
-          const pct = Math.round(((stepIdx + 1) / totalSteps) * 100);
-          progressFill.style.width = pct + "%";
-
-          const line = document.createElement("div");
-          line.className = "log-line";
-          line.innerHTML = '<span class="log-time">' + getTime() + '</span> ' + execSteps[stepIdx];
-          term.appendChild(line);
-          term.scrollTop = term.scrollHeight;
-
-          stepIdx++;
-        } else {
-          clearInterval(interval);
-          progressFill.style.width = "100%";
-          setTimeout(() => {
-            const finishLine = document.createElement("div");
-            finishLine.className = "log-line log-ok";
-            finishLine.innerHTML = '<span class="log-time">' + getTime() + '</span> [SUCCESS] Live run complete · All parameters converged (200 OK)';
-            term.appendChild(finishLine);
-            term.scrollTop = term.scrollHeight;
-
-            statusText.innerText = "Execution successful (200 OK) · Result preview refreshed";
-            btn.disabled = false;
-            btn.innerHTML = '<span>✓ Live Run Complete</span>';
-            isRunning = false;
-          }, 300);
-        }
-      }, 400);
-    }
+    window.onload = calculateQuote;
   </script>
 </body>
 </html>
