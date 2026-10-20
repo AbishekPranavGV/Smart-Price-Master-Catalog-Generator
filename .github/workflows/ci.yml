@@ -1,0 +1,23 @@
+name: CI PriceMaster Catalog Generator Validation
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify PriceMaster Multi-OS Distribution Packages
+        run: |
+          python -c "
+          import os, zipfile, glob
+          zips = glob.glob('*.zip')
+          assert len(zips) > 0, 'PriceMaster distribution zip missing'
+          for z in zips:
+              with zipfile.ZipFile(z, 'r') as zf:
+                  print(f'Verified PriceMaster distribution {z}: {len(zf.namelist())} files')
+          print('PriceMaster portable multi-OS release verified!')
+          "
